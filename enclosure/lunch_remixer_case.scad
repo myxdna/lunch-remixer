@@ -3,6 +3,10 @@
 // Fridge mounting: 3× neodymium disc magnets (10mm × 2mm)
 // Closed with 4× M2×12 self-tapping screws (no inserts needed)
 // Designed for Bambu Lab P1S, PLA — NO SUPPORTS REQUIRED
+//
+// Can be used as a library: include <lunch_remixer_case.scad>
+// then set LIBRARY_MODE = true (after the include) to suppress the exploded render.
+LIBRARY_MODE = false;
 
 /* --- Board measurements (mm) --- */
 
@@ -257,19 +261,21 @@ module front_shell() {
     }
 }
 
-/* --- Render (exploded view — comment out for STL export) --- */
+/* --- Render (exploded view — suppressed when LIBRARY_MODE = true) --- */
 
-color("SteelBlue")
-    back_shell();
+if (!LIBRARY_MODE) {
+    color("SteelBlue")
+        back_shell();
 
-color("LightSteelBlue")
-    translate([0, outer_width + 20, 0])
-        front_shell();
+    color("LightSteelBlue")
+        translate([0, outer_width + 20, 0])
+            front_shell();
 
-echo(str("OUTER SIZE: ", outer_length, " × ", outer_width, " × ", total_depth, " mm"));
-echo(str("BACK SHELL: ", split_at, " mm   FRONT SHELL: ", total_depth - split_at, " mm"));
-echo(str("SCREWS: 4× M2×12 flat-head self-tapping"));
+    echo(str("OUTER SIZE: ", outer_length, " × ", outer_width, " × ", total_depth, " mm"));
+    echo(str("BACK SHELL: ", split_at, " mm   FRONT SHELL: ", total_depth - split_at, " mm"));
+    echo(str("SCREWS: 4× M2×12 flat-head self-tapping"));
+}
 
-// --- To export STL, uncomment ONE line and comment out the render block above ---
+// --- To export STL, uncomment ONE line (and set LIBRARY_MODE = false above) ---
 // back_shell();
 // front_shell();

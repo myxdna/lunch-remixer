@@ -75,6 +75,7 @@ lunch-remixer/
 │   └── food_list.json     # Default food list (uploaded to LittleFS)
 ├── enclosure/
 │   ├── lunch_remixer_case.scad  # OpenSCAD parametric case design
+│   ├── assembly_mockup.scad     # Fully assembled device mockup (for visualization)
 │   └── print_settings.md       # Print settings + assembly guide
 └── platformio.ini         # Build configuration
 ```
