@@ -30,7 +30,7 @@ button_diameter = 4.0;
 // Mounting holes (3.8mm, 6 total — approximate positions)
 mount_hole_d = 3.8;
 
-// LiPo battery (103040 — 40x30x5mm, ~1000mAh, common thin cell)
+// LiPo battery (503040 — 40x30x5mm, ~500-600mAh, JST PH 2.0mm)
 // Sits flat behind the PCB
 lipo_length = 40.0;
 lipo_width  = 30.0;

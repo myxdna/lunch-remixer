@@ -27,10 +27,10 @@
 | Item | Notes | ~CAD |
 |------|-------|------|
 | LILYGO T5 4.7" v2.3 | ESP32-S3, e-paper, USB-C, battery charging built in | $55 |
-| LiPo battery 103040 | 40x30x5mm, ~1000mAh, JST 1.25mm connector | $8 |
+| LiPo battery 503040 | 40x30x5mm, ~500-600mAh, JST PH 2.0mm connector | $7 |
 | 3x neodymium magnets | 10mm x 2mm disc | $5 |
 | PLA filament | ~20g total | $1 |
-| **Total** | | **~$69** |
+| **Total** | | **~$68** |
 
 ## Assembly
 1. Print both shells
@@ -44,7 +44,7 @@
 
 ## Battery
 - Charges via USB-C through the T5's built-in TP4054 charger
-- ~1000mAh lasts **6-12 months** at ~10uA deep sleep (1 press/day)
+- ~500-600mAh lasts **6-12 months** at ~10uA deep sleep (1 press/day)
 - Charge indicator LED visible through the case gap or USB-C cutout
 - No battery swapping needed — just plug in USB-C occasionally
 
