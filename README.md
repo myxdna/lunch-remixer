@@ -18,9 +18,10 @@ Press the button → get a randomized lunch combo from your own food list. Hold 
 | [LILYGO T5 4.7" e-Paper v2.3](https://lilygo.cc/en-ca/products/t5-4-7-inch-e-paper-v2-3) | ESP32-S3, 960x540 e-ink display, WiFi, USB-C charging, battery connector |
 | 3.7V LiPo battery | 503040, ~500-600mAh, JST PH 2.0mm connector |
 | 3x neodymium magnets | 10mm x 2mm disc — for fridge mounting |
-| 3D printed case | Two-piece snap-fit, ~14.5mm thick, PLA |
+| 3D printed case | Two-piece, 4× M2×12 screws, ~16.5mm thick, PLA |
+| 4x M2×12 screws | Flat-head self-tapping, for closing the case |
 
-**Total cost: ~$68 CAD**
+**Total cost: ~$69 CAD**
 
 ## Editing the Food List
 
