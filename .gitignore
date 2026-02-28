@@ -1,0 +1,11 @@
+.pio/
+.vscode/
+build/
+__pycache__/
+*.o
+*.obj
+*.elf
+*.bin
+*.hex
+.DS_Store
+Thumbs.db

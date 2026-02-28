@@ -1,0 +1,56 @@
+{
+  "categories": [
+    {
+      "name": "Main",
+      "items": [
+        "Turkey Wrap",
+        "PB&J Sandwich",
+        "Ham & Cheese",
+        "Pasta Salad",
+        "Quesadilla",
+        "Bagel & Cream Cheese"
+      ]
+    },
+    {
+      "name": "Side",
+      "items": [
+        "Baby Carrots",
+        "Hummus & Celery",
+        "Cheese Cubes",
+        "Pretzels",
+        "Yogurt",
+        "Crackers"
+      ]
+    },
+    {
+      "name": "Fruit",
+      "items": [
+        "Apple Slices",
+        "Grapes",
+        "Banana",
+        "Strawberries",
+        "Mandarin",
+        "Blueberries"
+      ]
+    },
+    {
+      "name": "Snack",
+      "items": [
+        "Granola Bar",
+        "Goldfish",
+        "Trail Mix",
+        "Rice Cakes",
+        "Fruit Snacks",
+        "Popcorn"
+      ]
+    },
+    {
+      "name": "Drink",
+      "items": [
+        "Water Bottle",
+        "Juice Box",
+        "Milk"
+      ]
+    }
+  ]
+}
