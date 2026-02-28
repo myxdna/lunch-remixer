@@ -139,24 +139,17 @@ module magnet_components() {
                          $fn = 28);
 }
 
-// M2 flat-head screws countersunk into fridge face
+// M3 socket cap head screws recessed into fridge face
 module screw_components() {
     for (p = boss_positions)
         color(METAL_C) {
-            // Countersunk cone
-            translate([p[0], p[1], 0.0])
-                cylinder(d1 = csink_d, d2 = screw_clr_d,
-                         h = csink_z, $fn = 16);
-            // Screw head flat face (flush circle)
-            translate([p[0], p[1], 0.0])
-                cylinder(d = csink_d - 0.4, h = 0.3, $fn = 16);
-            // Phillips cross slot (suggestive)
-            color([0.40, 0.40, 0.40, 1.0]) {
-                translate([p[0] - csink_d/2 + 0.4, p[1] - 0.3, 0.0])
-                    cube([csink_d - 0.8, 0.6, 0.4]);
-                translate([p[0] - 0.3, p[1] - csink_d/2 + 0.4, 0.0])
-                    cube([0.6, csink_d - 0.8, 0.4]);
-            }
+            // Cap head cylinder sitting in cylindrical recess
+            translate([p[0], p[1], 0.1])
+                cylinder(d = csink_d - 0.6, h = csink_z - 0.2, $fn = 16);
+            // Hex socket recess (suggestive — 6-sided)
+            color([0.28, 0.28, 0.28, 1.0])
+                translate([p[0], p[1], csink_z - 0.2])
+                    cylinder(d = 2.5, h = 0.5, $fn = 6);
         }
 }
 

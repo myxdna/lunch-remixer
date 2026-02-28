@@ -1,7 +1,7 @@
 // Lunch Remixer Enclosure — LILYGO T5 4.7" e-Paper (ESP32-S3)
 // LiPo: 503040 (40×30×5mm), JST PH 2.0mm
 // Fridge mounting: 3× neodymium disc magnets (10mm × 2mm)
-// Closed with 4× M2×12 self-tapping screws (no inserts needed)
+// Closed with 4× M3 socket cap head screws + M3 heat-set threaded inserts
 // Designed for Bambu Lab P1S, PLA — NO SUPPORTS REQUIRED
 //
 // Can be used as a library: include <lunch_remixer_case.scad>
@@ -63,18 +63,17 @@ outer_width  = inner_width  + wall * 2;
 split_at = wall + back_zone + 2.0;   // 10.5mm back / 6.0mm front
 
 /* --- Screw boss geometry --- */
-// 4× M2×12 self-tapping screws from fridge face through back shell into front shell bosses
-// Head: M2 flat (countersunk), ⌀3.8mm × 1.2mm deep
-// Clearance hole through back shell posts: ⌀2.2mm
-// Pilot hole in front shell bosses: ⌀1.8mm, 6mm deep
+// 4× M3 socket cap head screws + M3 heat-set threaded inserts
+// Inserts: heated into front shell boss blind pockets from mating face
+// Screws: M3 cap head from fridge face, clearance through back shell posts
 
-boss_od     = 6.5;     // outer diameter of screw boss cylinder
-boss_inset  = 6.0;     // boss center distance from outer corner edge
-screw_clr_d = 2.2;     // M2 clearance
-csink_d     = 3.8;     // M2 flat-head countersink diameter
-csink_z     = 1.2;     // countersink depth (fridge face)
-pilot_d     = 1.8;     // M2 self-tap pilot hole diameter
-pilot_depth = 6.0;     // engagement depth in front shell
+boss_od       = 8.0;   // outer diameter — wall around M3 insert pocket
+boss_inset    = 6.5;   // boss centre from outer corner edge
+screw_clr_d   = 3.3;   // M3 clearance hole through back shell
+csink_d       = 6.0;   // M3 socket cap head recess diameter
+csink_z       = 3.2;   // M3 socket cap head height recess
+insert_hole_d = 4.2;   // M3 heat-set insert press hole in PLA
+insert_depth  = 5.5;   // blind pocket depth (≥ 5mm insert length)
 
 boss_positions = [
     [boss_inset,                boss_inset],
@@ -90,22 +89,24 @@ magnet_positions = [
     [outer_length * 0.80, outer_width / 2]
 ];
 
-/* --- Teenage Engineering-style back face texture --- */
+/* --- Teenage Engineering-style FRONT face design --- */
+// All branding is on the user-visible display side.
+// Back face (fridge) is clean: only magnet pockets + screw recesses.
 
-// Dot matrix perforation — right ~42% of back shell fridge face
-// Matches K.O. II grille aesthetic; dots interrupted by magnet pockets naturally
-dot_d      = 1.8;    // hole diameter (printable at 0.20mm layers)
-dot_depth  = 0.8;    // blind pocket depth (leaves 1.7mm floor in 2.5mm wall)
+// Dot matrix — left strip of front shell, beside the display window
+// Matches K.O. II grille aesthetic; 2 columns of blind pockets
+dot_d      = 1.8;    // blind pocket diameter (printable at 0.20mm layers)
+dot_depth  = 0.8;    // blind pocket depth (leaves ≥1.7mm floor in 2.5mm wall)
 dot_pitch  = 4.5;    // centre-to-centre spacing
-dot_area_x = outer_length * 0.58;        // start x (~74mm from left edge)
-dot_area_w = outer_length - 16 - dot_area_x;  // extends to ~12mm from right edge
-dot_area_y = 14;                          // top/bottom margin
-dot_area_h = outer_width - 28;
+dot_area_x = 3.0;    // left column x in left border strip
+dot_area_w = 5.0;    // span ~2 columns (x = 3.0 and 7.5)
+dot_area_y = 14.0;   // y start — clears corner bosses (boss at y=6.5, r=4mm)
+dot_area_h = outer_width - 28.0;  // clears both corner bosses
 
-// Engraved product name — left portion of back face
-// Recessed 0.5mm into the fridge-facing wall; readable when device is in hand
-name_x  = outer_length * 0.29;   // horizontal centre of text block
-name_y  = outer_width / 2 + 5;   // slightly above shell centre
+// Engraved product name — bottom border of front face (display side)
+// Below the display window, centred; readable when device is on fridge door
+name_x = outer_length / 2;   // horizontally centred
+name_y = 2.9;                 // centre of bottom border strip (~5.8mm tall)
 
 /* --- USB-C cutout dimensions ---
    Board sits at z = wall + back_zone = 8.5mm from fridge face.
@@ -135,7 +136,7 @@ module back_shell() {
         union() {
             rounded_box(outer_length, outer_width, split_at, corner_r);
 
-            // Boss columns for M2 screws — solid cylinders, trimmed by interior later
+            // Boss columns for M3 screws — solid cylinders, trimmed by interior later
             for (p = boss_positions)
                 translate([p[0], p[1], 0])
                     cylinder(d = boss_od, h = split_at, $fn = 24);
@@ -151,14 +152,14 @@ module back_shell() {
             translate([m[0], m[1], -0.1])
                 cylinder(d = magnet_diameter + 0.4, h = magnet_height + 0.1, $fn = 32);
 
-        // ---- M2 screw clearance holes + countersinks (fridge face) ----
+        // ---- M3 screw clearance holes + cap-head recesses (fridge face) ----
         for (p = boss_positions) {
-            // Clearance hole
+            // M3 clearance hole through full post depth
             translate([p[0], p[1], -0.1])
                 cylinder(d = screw_clr_d, h = split_at + 0.2, $fn = 16);
-            // Countersink for flat M2 head
+            // Cylindrical recess for M3 socket cap head
             translate([p[0], p[1], -0.1])
-                cylinder(d1 = csink_d, d2 = screw_clr_d, h = csink_z + 0.1, $fn = 16);
+                cylinder(d = csink_d, h = csink_z + 0.1, $fn = 16);
         }
 
         // ---- USB-C slot (left short wall, x=0 face) ----
@@ -166,32 +167,6 @@ module back_shell() {
                    wall + clearance + usbc_offset_y - usbc_width / 2,
                    usbc_slot_z_back])
             cube([wall + 0.2, usbc_width, usbc_slot_height]);
-
-        // ---- Dot matrix perforation (fridge face, right ~42%) ----
-        // The rightmost magnet pocket naturally interrupts the grid — intentional.
-        for (ix = [0 : floor(dot_area_w / dot_pitch)])
-            for (iy = [0 : floor(dot_area_h / dot_pitch)])
-                translate([dot_area_x + ix * dot_pitch,
-                           dot_area_y  + iy * dot_pitch,
-                           -0.1])
-                    cylinder(d = dot_d, h = dot_depth + 0.1, $fn = 12);
-
-        // ---- Engraved product name + tagline (fridge face, left area) ----
-        translate([name_x, name_y, -0.1])
-            linear_extrude(0.6)
-                text("LUNCH REMIXER",
-                     size = 7,
-                     font = "Liberation Mono:style=Bold",
-                     halign = "center",
-                     valign = "center");
-
-        translate([name_x, name_y - 11, -0.1])
-            linear_extrude(0.4)
-                text("PRESS BUTTON. EAT LUNCH.",
-                     size = 4,
-                     font = "Liberation Mono:style=Regular",
-                     halign = "center",
-                     valign = "center");
     }
 
     // ---- LiPo retainer posts ----
@@ -254,10 +229,30 @@ module front_shell() {
                    0])
             cube([wall + 0.2, usbc_width, usbc_slot_height - (split_at - usbc_slot_z_back) + 0.1]);
 
-        // ---- M2 pilot holes (from mating face up into boss) ----
+        // ---- M3 heat-set insert blind pockets (from mating face into boss) ----
+        // Heat insert from mating/interior side; screw enters from fridge face.
         for (p = boss_positions)
             translate([p[0], p[1], -0.1])
-                cylinder(d = pilot_d, h = pilot_depth + 0.1, $fn = 16);
+                cylinder(d = insert_hole_d, h = insert_depth + 0.1, $fn = 16);
+
+        // ---- Dot matrix (front/display face, left border strip) ----
+        // 2 columns of blind pockets beside the display window — K.O. II aesthetic.
+        for (ix = [0 : floor(dot_area_w / dot_pitch)])
+            for (iy = [0 : floor(dot_area_h / dot_pitch)])
+                translate([dot_area_x + ix * dot_pitch,
+                           dot_area_y  + iy * dot_pitch,
+                           fh - dot_depth])
+                    cylinder(d = dot_d, h = dot_depth + 0.1, $fn = 12);
+
+        // ---- Engraved product name (front/display face, bottom border) ----
+        // Centred below the display window; readable when device is on the fridge.
+        translate([name_x, name_y, fh - 0.6])
+            linear_extrude(0.7)
+                text("LUNCH REMIXER",
+                     size = 3.5,
+                     font = "Liberation Mono:style=Bold",
+                     halign = "center",
+                     valign = "center");
     }
 }
 
@@ -273,7 +268,7 @@ if (!LIBRARY_MODE) {
 
     echo(str("OUTER SIZE: ", outer_length, " × ", outer_width, " × ", total_depth, " mm"));
     echo(str("BACK SHELL: ", split_at, " mm   FRONT SHELL: ", total_depth - split_at, " mm"));
-    echo(str("SCREWS: 4× M2×12 flat-head self-tapping"));
+    echo(str("SCREWS: 4× M3 socket cap head + M3 heat-set threaded inserts"));
 }
 
 // --- To export STL, uncomment ONE line (and set LIBRARY_MODE = false above) ---
