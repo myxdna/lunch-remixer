@@ -86,6 +86,23 @@ magnet_positions = [
     [outer_length * 0.80, outer_width / 2]
 ];
 
+/* --- Teenage Engineering-style back face texture --- */
+
+// Dot matrix perforation — right ~42% of back shell fridge face
+// Matches K.O. II grille aesthetic; dots interrupted by magnet pockets naturally
+dot_d      = 1.8;    // hole diameter (printable at 0.20mm layers)
+dot_depth  = 0.8;    // blind pocket depth (leaves 1.7mm floor in 2.5mm wall)
+dot_pitch  = 4.5;    // centre-to-centre spacing
+dot_area_x = outer_length * 0.58;        // start x (~74mm from left edge)
+dot_area_w = outer_length - 16 - dot_area_x;  // extends to ~12mm from right edge
+dot_area_y = 14;                          // top/bottom margin
+dot_area_h = outer_width - 28;
+
+// Engraved product name — left portion of back face
+// Recessed 0.5mm into the fridge-facing wall; readable when device is in hand
+name_x  = outer_length * 0.29;   // horizontal centre of text block
+name_y  = outer_width / 2 + 5;   // slightly above shell centre
+
 /* --- USB-C cutout dimensions ---
    Board sits at z = wall + back_zone = 8.5mm from fridge face.
    USB-C port center ≈ 1.75mm above PCB bottom = z ≈ 10.25mm.
@@ -145,6 +162,32 @@ module back_shell() {
                    wall + clearance + usbc_offset_y - usbc_width / 2,
                    usbc_slot_z_back])
             cube([wall + 0.2, usbc_width, usbc_slot_height]);
+
+        // ---- Dot matrix perforation (fridge face, right ~42%) ----
+        // The rightmost magnet pocket naturally interrupts the grid — intentional.
+        for (ix = [0 : floor(dot_area_w / dot_pitch)])
+            for (iy = [0 : floor(dot_area_h / dot_pitch)])
+                translate([dot_area_x + ix * dot_pitch,
+                           dot_area_y  + iy * dot_pitch,
+                           -0.1])
+                    cylinder(d = dot_d, h = dot_depth + 0.1, $fn = 12);
+
+        // ---- Engraved product name + tagline (fridge face, left area) ----
+        translate([name_x, name_y, -0.1])
+            linear_extrude(0.6)
+                text("LUNCH REMIXER",
+                     size = 7,
+                     font = "Liberation Mono:style=Bold",
+                     halign = "center",
+                     valign = "center");
+
+        translate([name_x, name_y - 11, -0.1])
+            linear_extrude(0.4)
+                text("PRESS BUTTON. EAT LUNCH.",
+                     size = 4,
+                     font = "Liberation Mono:style=Regular",
+                     halign = "center",
+                     valign = "center");
     }
 
     // ---- LiPo retainer posts ----
