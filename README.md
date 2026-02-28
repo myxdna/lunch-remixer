@@ -16,11 +16,12 @@ Press the button → get a randomized lunch combo from your own food list. Hold 
 | Part | Details |
 |------|---------|
 | [LILYGO T5 4.7" e-Paper v2.3](https://lilygo.cc/en-ca/products/t5-4-7-inch-e-paper-v2-3) | ESP32-S3, 960x540 e-ink display, WiFi, USB-C charging, battery connector |
-| 3.7V LiPo battery | ~1000mAh, JST PH 2.0mm connector (e.g. 503450 or 803040 cell) |
+| 3.7V LiPo battery | 503040, ~500-600mAh, JST PH 2.0mm connector |
 | 3x neodymium magnets | 10mm x 2mm disc — for fridge mounting |
-| 3D printed case | Two-piece snap-fit, ~14.5mm thick, PLA |
+| 3D printed case | Two-piece, 4× M2×12 screws, ~16.5mm thick, PLA |
+| 4x M2×12 screws | Flat-head self-tapping, for closing the case |
 
-**Total cost: ~$78 CAD**
+**Total cost: ~$69 CAD**
 
 ## Editing the Food List
 
@@ -74,6 +75,7 @@ lunch-remixer/
 │   └── food_list.json     # Default food list (uploaded to LittleFS)
 ├── enclosure/
 │   ├── lunch_remixer_case.scad  # OpenSCAD parametric case design
+│   ├── assembly_mockup.scad     # Fully assembled device mockup (for visualization)
 │   └── print_settings.md       # Print settings + assembly guide
 └── platformio.ini         # Build configuration
 ```
@@ -82,7 +84,7 @@ lunch-remixer/
 
 - **Deep sleep between presses:** ~10μA
 - **Display refresh:** ~4 seconds, then back to sleep
-- **Battery life:** 6-12 months on a 1000mAh LiPo with daily use
+- **Battery life:** 6-12 months on a 503040 LiPo with daily use
 - **Charging:** USB-C, built into the T5 board
 
 ## Food List Format
