@@ -102,12 +102,12 @@ module pcb_component() {
                    _board_z - 3.4])
             cube([18, 14, 3.4]);
 
-    // USB-C port on left short edge
+    // USB-C port on bottom short edge (portrait)
     color(METAL_C)
-        translate([px - 4,
-                   py + usbc_offset_y - usbc_width / 2,
+        translate([px + usbc_offset_x - usbc_width / 2,
+                   py - 4,
                    _board_z + 0.6])
-            cube([5, usbc_width, usbc_height]);
+            cube([usbc_width, 5, usbc_height]);
 
     // Tactile button (GPIO 21) — near right edge of board top
     color(BUTTON_C)
@@ -121,12 +121,12 @@ module pcb_component() {
                    _pcb_top + 2.0])
             cylinder(d = 2.0, h = 0.8, $fn = 16);
 
-    // Ribbon cable from display to PCB edge (suggestive only)
+    // Ribbon cable from display to left PCB edge (suggestive — portrait)
     color([0.80, 0.80, 0.10, 0.8])
-        translate([px + display_offset_x + display_length * 0.4,
-                   py,
+        translate([px,
+                   py + display_offset_y + display_width * 0.4,
                    _board_z + 0.8])
-            cube([display_length * 0.2, 2, 0.4]);
+            cube([2, display_width * 0.2, 0.4]);
 }
 
 // Neodymium disc magnets pressed into back wall pockets

@@ -10,25 +10,27 @@ LIBRARY_MODE = false;
 
 /* --- Board measurements (mm) --- */
 
-// LILYGO T5 4.7" v2.3
-board_length = 121.0;
-board_width  = 67.0;
+// LILYGO T5 4.7" v2.3 — portrait orientation (device hangs tall on fridge)
+// Board rotated 90° CCW: short axis → X (width), long axis → Y (height)
+// USB-C at the bottom, button near top-right
+board_length = 67.0;    // short axis → X (width of enclosure interior)
+board_width  = 121.0;   // long axis  → Y (height of enclosure interior)
 board_thick  = 5.0;    // PCB + back components; display is flush on front face
 
-// Display active area
-display_length   = 105.0;
-display_width    = 60.0;
-display_offset_x = 8.0;   // from board left edge
-display_offset_y = 3.5;   // from board bottom edge
+// Display active area (portrait: 60mm wide × 105mm tall)
+display_length   = 60.0;    // X size
+display_width    = 105.0;   // Y size
+display_offset_x = 3.5;   // from board left edge
+display_offset_y = 8.0;   // from board bottom edge
 
-// USB-C port (on the LEFT short edge of the board — x=0 wall)
+// USB-C port (on the BOTTOM short edge of the board — y=0 wall)
 usbc_width    = 9.5;
 usbc_height   = 3.5;
-usbc_offset_y = 33.5;   // center of port along the short edge
+usbc_offset_x = 33.5;   // center of port along the bottom edge (67mm/2 = centred)
 
-// Button (GPIO 21, near right edge of board top face)
-button_x        = 110.0;
-button_y        = 10.0;
+// Button (GPIO 21, near top-right in portrait)
+button_x        = 57.0;    // 67 - 10 = 57mm from left
+button_y        = 110.0;   // 110mm from bottom
 button_diameter = 4.0;
 
 // LiPo battery — 503040 (40×30×5mm, JST PH 2.0mm)
@@ -83,10 +85,11 @@ boss_positions = [
 ];
 
 // Magnet pocket positions (3 evenly spaced, centered on back wall)
+// Portrait: magnets run down the vertical centre spine
 magnet_positions = [
-    [outer_length * 0.20, outer_width / 2],
-    [outer_length * 0.50, outer_width / 2],
-    [outer_length * 0.80, outer_width / 2]
+    [outer_length / 2, outer_width * 0.20],
+    [outer_length / 2, outer_width * 0.50],
+    [outer_length / 2, outer_width * 0.80]
 ];
 
 /* --- Teenage Engineering-style FRONT face design --- */
@@ -98,21 +101,22 @@ magnet_positions = [
 dot_d      = 1.8;    // blind pocket diameter (printable at 0.20mm layers)
 dot_depth  = 0.8;    // blind pocket depth (leaves ≥1.7mm floor in 2.5mm wall)
 dot_pitch  = 4.5;    // centre-to-centre spacing
-dot_area_x = 3.0;    // left column x in left border strip
-dot_area_w = 5.0;    // span ~2 columns (x = 3.0 and 7.5)
-dot_area_y = 14.0;   // y start — clears corner bosses (boss at y=6.5, r=4mm)
-dot_area_h = outer_width - 28.0;  // clears both corner bosses
+// Portrait: left strip is ~5.8mm wide — single column of dots fits cleanly
+dot_area_x = 3.0;    // single column centred in left border strip
+dot_area_w = 0.0;    // 1 column only (floor(0/pitch)=0 → ix=[0:0])
+dot_area_y = 14.0;   // y start — clears corner boss (boss at y=6.5, r=4mm)
+dot_area_h = outer_width - 28.0;  // clears both corner bosses (~22 dots tall)
 
 // Engraved product name — bottom border of front face (display side)
-// Below the display window, centred; readable when device is on fridge door
+// Portrait bottom border is ~10mm tall — good room for text
 name_x = outer_length / 2;   // horizontally centred
-name_y = 2.9;                 // centre of bottom border strip (~5.8mm tall)
+name_y = 5.0;                 // centre of bottom border strip (~10.3mm tall)
 
 /* --- USB-C cutout dimensions ---
    Board sits at z = wall + back_zone = 8.5mm from fridge face.
    USB-C port center ≈ 1.75mm above PCB bottom = z ≈ 10.25mm.
    Port spans z ≈ 8.5mm to 12.0mm — crosses the split plane at 10.5mm.
-   Cut the slot in both shells so it aligns. */
+   Slot cut through the y=0 (bottom) wall in both shells so it aligns. */
 usbc_slot_z_back  = wall + back_zone - 0.5;   // start in back shell (z=8.0)
 usbc_slot_height  = usbc_height + 1.5;         // 5.0mm — generous
 
@@ -162,11 +166,11 @@ module back_shell() {
                 cylinder(d = csink_d, h = csink_z + 0.1, $fn = 16);
         }
 
-        // ---- USB-C slot (left short wall, x=0 face) ----
-        translate([-0.1,
-                   wall + clearance + usbc_offset_y - usbc_width / 2,
+        // ---- USB-C slot (bottom short wall, y=0 face) ----
+        translate([wall + clearance + usbc_offset_x - usbc_width / 2,
+                   -0.1,
                    usbc_slot_z_back])
-            cube([wall + 0.2, usbc_width, usbc_slot_height]);
+            cube([usbc_width, wall + 0.2, usbc_slot_height]);
     }
 
     // ---- LiPo retainer posts ----
@@ -224,10 +228,10 @@ module front_shell() {
         // ---- USB-C slot continuation (aligns with back shell cutout) ----
         // Back shell cuts from z=8.0mm; front shell bottom is at split_at=10.5mm.
         // Front shell USB-C slot covers the remaining port height.
-        translate([-0.1,
-                   wall + clearance + usbc_offset_y - usbc_width / 2,
+        translate([wall + clearance + usbc_offset_x - usbc_width / 2,
+                   -0.1,
                    0])
-            cube([wall + 0.2, usbc_width, usbc_slot_height - (split_at - usbc_slot_z_back) + 0.1]);
+            cube([usbc_width, wall + 0.2, usbc_slot_height - (split_at - usbc_slot_z_back) + 0.1]);
 
         // ---- M3 heat-set insert blind pockets (from mating face into boss) ----
         // Heat insert from mating/interior side; screw enters from fridge face.
